@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shyamal | SDE x Founder's Office</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['Space Grotesk', 'monospace'],
+                    },
+                    colors: {
+                        hyper: {
+                            bg: '#030014', // Deep space dark
+                            glass: 'rgba(255, 255, 255, 0.03)',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            primary: '#7c3aed', // Violet 600
+                            secondary: '#22d3ee', // Cyan 400
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'typewriter': 'typewriter 2s steps(40, end) forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: 0.4, transform: 'scale(1)' },
+                            '50%': { opacity: 0.8, transform: 'scale(1.1)' },
+                        },
+                        typewriter: {
+                            'from': { width: '0' },
+                            'to': { width: '100%' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            background-color: #030014; 
+            color: #e5e5e5; 
+            overflow-x: hidden;
+        }
+
+        /* Background Grid */
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(124, 58, 237, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
+
+        /* Ambient Orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* Holographic Card */
+        .holo-card {
+            background: rgba(13, 12, 24, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .holo-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .holo-card:hover::before {
+            left: 100%;
+        }
+
+        .holo-card:hover {
+            border-color: rgba(34, 211, 238, 0.5);
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
+            transform: translateY(-5px);
+        }
+
+        /* Text Gradient */
+        .text-gradient {
+            background: linear-gradient(to right, #a78bfa, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Staggered Animation Classes */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        
+        .reveal-up.active { opacity: 1; transform: translateY(0); }
+
+        .stagger-1 { transition-delay: 100ms; }
+        .stagger-2 { transition-delay: 200ms; }
+        .stagger-3 { transition-delay: 300ms; }
+        .stagger-4 { transition-delay: 400ms; }
+        .stagger-5 { transition-delay: 500ms; }
+
+        /* Typing Cursor */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative">
+
+    <!-- Ambient Background Effects -->
+    <div class="fixed inset-0 w-full h-full bg-grid pointer-events-none"></div>
+    <div class="orb w-[600px] h-[600px] bg-purple-900/20 top-[-200px] left-[-200px] animate-pulse-slow"></div>
+    <div class="orb w-[500px] h-[500px] bg-cyan-900/10 bottom-[10%] right-[-100px] animate-float"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-[#030014]/90 backdrop-blur-md">
+        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2 group cursor-pointer">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                    <span class="font-bold text-white text-lg">H</span>
+                </div>
+                <div class="font-sans font-bold text-xl tracking-tight text-white">
+                    Hyperleap<span class="text-cyan-400">AI</span>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex gap-8 text-sm font-mono text-gray-400">
+                <a href="#about" class="hover:text-white transition-colors">About Me</a>
+                <a href="#projects" class="hover:text-white transition-colors">Projects</a>
+                <a href="#why-hyperleap" class="hover:text-white transition-colors">Why Hyperleap</a>
+                <a href="#contact" class="text-cyan-400">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-48 pb-24 relative z-10">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <div class="reveal-up">
+                <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-cyan-400 mb-8 backdrop-blur-sm">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                    </span>
+                    B.Tech CS (AIML) &times; FOUNDER'S OFFICE
+                </div>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-8 reveal-up stagger-1 leading-tight">
+                Engineering the <br>
+                <span class="text-gradient typing-cursor">Business of AI</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-400 font-light max-w-3xl mx-auto reveal-up stagger-2 leading-relaxed mb-10">
+                I bridge the gap between AI models and Real ROI.
+                <br><span class="text-purple-400 font-mono text-sm mt-4 block">Shyamal Kudupudi | Aspiring Founder's Engineer</span>
+            </p>
+
+            <div class="reveal-up stagger-3 flex justify-center gap-4">
+                <button onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})" class="px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-bold transition-all hover:scale-105 flex items-center gap-2 group">
+                    View Profile
+                    <i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 1. ABOUT ME & PROJECTS -->
+    <section id="about" class="py-24 relative z-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row gap-12">
+                <!-- Profile Side -->
+                <div class="md:w-1/3 reveal-up">
+                    <div class="sticky top-24">
+                        <div class="holo-card p-8 rounded-2xl text-center border-t border-purple-500/20">
+                            <!-- Image Container -->
+                            <div class="w-32 h-32 mx-auto rounded-full bg-gradient-to-tr from-purple-500 to-cyan-400 p-[2px] mb-6">
+                                <div class="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
+                                    <!-- Use a generic user icon as fallback if image isn't local -->
+                                    <img src="picofme (1).png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'" alt="Shyamal" class="w-full h-full object-cover">
+                                    <i data-lucide="user" class="w-16 h-16 text-gray-500 hidden"></i>
+                                </div>
+                            </div>
+                            
+                            <h2 class="text-2xl font-bold text-white mb-2">Shyamal Kudupudi</h2>
+                            <p class="text-cyan-400 font-mono text-sm mb-6">B.Tech CS (AIML)</p>
+                            
+                            <div class="flex justify-center gap-4 mb-8">
+                                <a href="https://github.com/shyamal005" target="_blank" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors">
+                                    <i data-lucide="github" class="w-5 h-5"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/in/shyamal-kudupudi-001047228/" target="_blank" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-blue-400 transition-colors">
+                                    <i data-lucide="linkedin" class="w-5 h-5"></i>
+                                </a>
+                                <a href="mailto:kudipudishaymal0123@gmail.com" class="p-2 rounded-full bg-white/5 hover:bg-white/10 text-purple-400 transition-colors">
+                                    <i data-lucide="mail" class="w-5 h-5"></i>
+                                </a>
+                            </div>
+
+                            <div class="text-left space-y-4 text-sm text-gray-400 bg-black/40 p-4 rounded-xl">
+                                <div class="flex justify-between border-b border-white/5 pb-2">
+                                    <span>Experience</span>
+                                    <span class="text-white">Fresher / Intern</span>
+                                </div>
+                                <div class="flex justify-between border-b border-white/5 pb-2">
+                                    <span>Specialization</span>
+                                    <span class="text-white">AI & Machine Learning</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Tech Stack</span>
+                                    <span class="text-white">Java, Python, AI</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Side -->
+                <div class="md:w-2/3 space-y-12" id="projects">
+                    <!-- Intro -->
+                    <div class="reveal-up stagger-1">
+                        <h3 class="text-3xl font-bold text-white mb-4">About Me</h3>
+                        <p class="text-gray-400 leading-relaxed text-lg">
+                            I am a final year Computer Science student specializing in AIML. Unlike typical engineers who only focus on algorithms, I obsess over <span class="text-cyan-400">product velocity</span> and <span class="text-purple-400">user value</span>. I build full-stack applications to try to solve real-world problems.
+                        </p>
+                    </div>
+
+                    <!-- Projects Grid -->
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                            <i data-lucide="cpu" class="w-6 h-6 text-purple-500"></i> Featured Projects
+                        </h3>
+                        
+                        <div class="grid gap-6">
+                            <!-- Project 1: SmartTicket -->
+                            <div class="holo-card p-6 rounded-xl group hover:border-cyan-500/30 transition-all reveal-up stagger-2">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h4 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">SmartTicket: Agentic AI Support</h4>
+                                        <p class="text-xs font-mono text-gray-500 mt-1">Java • Groq LLAMA3 • Spring Boot</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <a href="https://smart-ticket-frontend.onrender.com/" target="_blank" class="text-gray-400 hover:text-white" title="Live Demo">
+                                            <i data-lucide="external-link" class="w-5 h-5"></i>
+                                        </a>
+                                        <a href="https://github.com/shyamal005/smart-ticket" target="_blank" class="text-gray-400 hover:text-white" title="Code">
+                                            <i data-lucide="github" class="w-5 h-5"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <p class="text-gray-400 text-sm mb-4">
+                                    SmartTicket utilizes an Agentic AI Logic Layer (Llama 3.3) to autonomously analyze, prioritize, and draft responses for incoming cases.
+                                </p>
+                            </div>
+
+                            <!-- Project 2: LiveQuery -->
+                            <div class="holo-card p-6 rounded-xl group hover:border-purple-500/30 transition-all reveal-up stagger-3">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h4 class="text-xl font-bold text-white group-hover:text-purple-400 transition-colors">LiveQuery: Real-Time Log Monitoring</h4>
+                                        <p class="text-xs font-mono text-gray-500 mt-1">Node.js • React • Websockets</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <a href="https://livequery-frontend.onrender.com" target="_blank" class="text-gray-400 hover:text-white" title="Live Demo">
+                                            <i data-lucide="external-link" class="w-5 h-5"></i>
+                                        </a>
+                                        <a href="https://github.com/shyamal005/livequery-project/tree/main" target="_blank" class="text-gray-400 hover:text-white" title="Code">
+                                            <i data-lucide="github" class="w-5 h-5"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <p class="text-gray-400 text-sm mb-4">
+                                    LiveQuery is a fully distributed real-time log monitoring platform that visualizes system performance across multiple nodes instantly.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. WHY HYPERLEAP AI -->
+    <section id="why-hyperleap" class="py-24 relative z-10 bg-white/[0.02]">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Text Content -->
+                <div class="reveal-up stagger-1">
+                    <div class="inline-block text-purple-400 font-mono text-xs mb-4 tracking-widest">WHY HYPERLEAP?</div>
+                    <h2 class="text-4xl font-bold text-white mb-6">Seeking the "0 to 1" Apprenticeship</h2>
+                    
+                    <div class="space-y-6 text-gray-300">
+                        <p>
+                            <strong class="text-white">Technology without revenue is just a hobby.</strong><br>
+                            As a fellow <span class="text-cyan-400 font-bold">B.Tech CS (AIML)</span> student, I see thousands of cool models on HuggingFace that never solve a business problem. I admire Hyperleap because you focus on "Real ROI" and building full-stack AI that delivers value.
+                        </p>
+                        <p>
+                            <strong class="text-white">Why the Founder's Office?</strong><br>
+                            I have a deep passion for startups. I don't just want to write code in isolation; I want to understand how a vision turns into a viable business. Working directly with an impressive founder like you is the ultimate masterclass in execution.
+                        </p>
+                    </div>
+
+                    <div class="mt-8 flex gap-4">
+                        <div class="px-4 py-2 bg-purple-500/10 rounded border border-purple-500/20 text-xs font-mono text-purple-300">
+                            #Execution
+                        </div>
+                        <div class="px-4 py-2 bg-cyan-500/10 rounded border border-cyan-500/20 text-xs font-mono text-cyan-300">
+                            #FounderLed
+                        </div>
+                        <div class="px-4 py-2 bg-white/5 rounded border border-white/10 text-xs font-mono text-gray-300">
+                            #FullStackAI
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual/Terminal -->
+                <div class="reveal-up stagger-2">
+                    <div class="bg-[#0f0f16] rounded-xl border border-white/10 shadow-2xl overflow-hidden font-mono text-sm">
+                        <div class="bg-white/5 px-4 py-3 flex items-center gap-2 border-b border-white/5">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <span class="ml-2 text-gray-500 text-xs">shyamal@hyperleap-office:~</span>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div>
+                                <span class="text-green-400">➜</span> <span class="text-cyan-400">git clone</span> <span class="text-white">founder-mindset</span>
+                                <div class="text-gray-500 mt-1 pl-4">Cloning repository... done.</div>
+                            </div>
+                            <div>
+                                <span class="text-green-400">➜</span> <span class="text-cyan-400">run</span> <span class="text-white">market_research.py</span>
+                                <div class="text-gray-500 mt-1 pl-4">
+                                    Analyzing competitors... [OK]<br>
+                                    Identifying gaps... [OK]<br>
+                                    Generating report... [DONE]
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-green-400">➜</span> <span class="text-cyan-400">echo</span> <span class="text-white">"Ready to Execute."</span>
+                                <div class="text-white mt-1 pl-4 font-bold">Ready to Execute.</div>
+                            </div>
+                            <div class="animate-pulse">
+                                <span class="text-green-400">➜</span> <span class="inline-block w-2 h-4 bg-gray-500 align-middle"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. CONTACT ME -->
+    <section id="contact" class="py-24 relative z-10">
+        <div class="max-w-4xl mx-auto px-6 text-center reveal-up">
+            <div class="relative group inline-block w-full md:w-auto">
+                <!-- Glowing Background -->
+                <div class="absolute -inset-1 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-xl blur opacity-30 group-hover:opacity-70 transition duration-1000 group-hover:duration-200"></div>
+                
+                <div class="relative holo-card px-10 py-16 rounded-xl border border-white/10 bg-[#050508] overflow-hidden">
+                    <!-- Background Shine -->
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-600/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+
+                    <i data-lucide="terminal-square" class="w-12 h-12 text-white mx-auto mb-6"></i>
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Ready to Execute?</h2>
+                    <p class="text-lg text-gray-400 mb-8 font-light max-w-lg mx-auto">
+                        I am ready to take on the 24-hour challenge. Let's discuss how I can add value to the CEO's Office.
+                    </p>
+                    
+                    <div class="flex flex-col md:flex-row gap-4 justify-center">
+                        <a href="mailto:kudipudishaymal0123@gmail.com" 
+                           class="relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-purple-600 font-mono rounded-lg hover:bg-purple-700 hover:scale-105 shadow-lg shadow-purple-500/25">
+                           <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                            Email Me
+                        </a>
+                        <a href="https://www.linkedin.com/in/shyamal-kudupudi-001047228/" target="_blank"
+                           class="px-8 py-4 bg-transparent border border-white/10 text-white font-mono rounded-lg hover:bg-[#0077b5] hover:border-[#0077b5] transition-colors flex items-center justify-center gap-2">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                            LinkedIn
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 text-center border-t border-white/5 bg-black relative z-10">
+        <div class="flex justify-center items-center gap-2 mb-4 text-white font-bold text-xl tracking-tight">
+             Hyperleap<span class="text-cyan-400">AI</span>
+        </div>
+        <p class="text-gray-600 text-xs font-mono">
+            Portfolio by Shyamal Kudupudi | B.Tech CS (AIML)
+        </p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        
+        // Scroll Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
